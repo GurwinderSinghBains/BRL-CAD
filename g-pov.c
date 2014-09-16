@@ -236,7 +236,7 @@ primitive_func(struct db_tree_state *tsp,
 	switch (ip->idb_type) {
 	    /* most commonly used primitives */
 	  
-case ID_TOR:	/* torus */
+	    case ID_TOR:	/* torus */
 		{ 
 		    struct rt_tor_internal *tor = (struct rt_tor_internal *)ip->idb_ptr;
 		    if( Torusflag == 0 )
@@ -293,7 +293,7 @@ case ID_TOR:	/* torus */
 
 
 	    case ID_ELL:
-	     case ID_SPH:
+	    case ID_SPH:
 		{
 		    /* spheres and ellipsoids */
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
