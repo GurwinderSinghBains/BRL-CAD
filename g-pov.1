@@ -1,0 +1,160 @@
+'\" t
+.\"     Title: G-POV
+.\"    Author: [see the "AUTHOR" section]
+.\" Generator: DocBook XSL-NS Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 08/31/2014
+.\"    Manual: User Commands
+.\"    Source: BRL-CAD
+.\"  Language: English
+.\"
+.TH "G\-POV" "1" "08/31/2014" "BRL\-CAD" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+g-pov \- Persistence of Vision Raytracing (BRL\-CAD to POV)
+.SH "SYNOPSIS"
+.HP \w'\fBg\-pov\fR\ 'u
+\fBg\-pov\fR [\-o\ \fIoutput_file\fR] [\-m\ \fIoutput_directory\fR] [\-b] [\-P\ \fInum_cpus\fR] [\-i] [\-8] [\-D\ \fIcalculation_tolerance\fR] [\-a\ \fIabsolute_tol\fR] [\-r\ \fIrelative_tol\fR] [\-n\ \fInormal_tol\fR] [\-xX\ \fIlevel\fR] [\-v] [\-C\ \fICamera_loc\fR] [\-V\ \fIView point\fR] [\-L\ \fILight_loc\fR] [\-l\ \fILight_col\fR] \fIdatabase\&.g\fR \fIobject(s)\fR...
+.SH "DESCRIPTION"
+.PP
+\fIg\-pov\fR
+converts the specified
+\fIobject(s)\fR
+from a BRL\-CAD
+\fIdatabase\&.g\fR
+file to the
+\fIPersistence Of Vision Raytracing\fR
+file format\&.
+.PP
+The following options are recognized\&.
+.PP
+\fB\-o PATH\fR
+.RS 4
+Specify output file name (default is stdout)\&.
+.RE
+.PP
+\fB\-m DIR\fR
+.RS 4
+Specify a directory for output files\&. Each region converted is written to a separate file\&. File names are constructed from the full path names of each region (the path from the specified object to the region)\&. Any "/" characters in the path name are replaced by "@" characters and "\&." and white space are replaced by "_" characters\&. If the \-m option is not specified, all regions are written to the same file\&. The
+\fB\-o\fR
+and
+\fB\-m\fR
+options are mutually exclusive\&.
+.RE
+.PP
+\fB\-b\fR
+.RS 4
+Write output as a binary STL file\&. The default is ASCII\&. In the case of ASCII output, the region name is specified on the "solid" line of the STL file\&. In the case of binary output, all the regions are output as a single STL part\&.
+.RE
+.PP
+\fB\-P#\fR
+.RS 4
+Specify the number of CPUs to utilize\&.
+.RE
+.PP
+\fB\-i\fR
+.RS 4
+Use inches as the output format (the default is mm)\&.
+.RE
+.PP
+\fB\-8\fR
+.RS 4
+Facetize using the marching cubes algorithm\&.
+.RE
+.PP
+\fB\-D#\fR
+.RS 4
+Specify a calculational distance tolerance (mm)\&. Any two vertices that are less than this distance apart will be treated as the same vertex\&.
+.RE
+.PP
+\fB\-a#\fR
+.RS 4
+Specify the absolute tesselation tolerance\&.
+.RE
+.PP
+\fB\-r#\fR
+.RS 4
+Specify the relative tesselation tolerance\&.
+.RE
+.PP
+\fB\-n#\fR
+.RS 4
+Specify the surface\-normal tesselation tolerance\&.
+.RE
+.PP
+\fB\-x#\fR
+.RS 4
+Specify an RT debug flag\&.
+.RE
+.PP
+\fB\-X#\fR
+.RS 4
+Specify an NMG debug flag\&.
+.RE
+.PP
+\fB\-v\fR
+.RS 4
+Enable verbose output\&.
+.RE
+.PP
+\fB\-C\fR
+.RS 4
+Specify the Camera location\&.
+.RE
+.PP
+\fB\-V\fR
+.RS 4
+Camera View point\&.
+.RE
+.PP
+\fB\-L\fR
+.RS 4
+Specify light source location\&.
+.RE
+.PP
+\fB\-l\fR
+.RS 4
+Specify colour of light source\&.
+.RE
+.SH "EXAMPLE"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ \fIg\-pov \-o sample\&.pov \-C 10 0 0\ \-V 0 0 0\ \-L 0 10 0\ \-l white\ sample\&.g sample_object\fR
+.fi
+.if n \{\
+.RE
+.\}
+.SH "DIAGNOSTICS"
+.PP
+Error messages are intended to be self\-explanatory\&.
+.SH "AUTHOR"
+.PP
+BRL\-CAD Team
+.SH "COPYRIGHT"
+.PP
+This software is Copyright (c) 2003\-2014 by the United States Government as represented by U\&.S\&. Army Research Laboratory\&.
+.SH "BUG REPORTS"
+.PP
+Reports of bugs or problems should be submitted via electronic mail to <devs@brlcad\&.org>\&.
+
+

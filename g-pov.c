@@ -54,6 +54,7 @@ struct user_data {
 };
 
 
+
 /* This routine just produces an ascii description of the Boolean tree.
  * In a real converter, this would output the tree in the desired format.
  */
@@ -179,7 +180,7 @@ region_start(struct db_tree_state *tsp,
     return 0;
 }
 
-
+int Torusflag = 0;    /* Set torus flag equal to zero */
 /**
  * @brief This is called when all sub-elements of a region have been processed by leaf_func.
  *
@@ -236,16 +237,23 @@ primitive_func(struct db_tree_state *tsp,
 	    /* most commonly used primitives */
 	  
 case ID_TOR:	/* torus */
-		{
+		{ 
 		    struct rt_tor_internal *tor = (struct rt_tor_internal *)ip->idb_ptr;
-
-		    printf(" \ntorus {\n");
-		    printf("\t//radius1 =\n %g ,\n", tor->r_a);
-		    printf("\t//radius2 = \n %g\n\n", tor->r_h);
-		    printf(" pigment{ LightBlue}\n");
-		     printf("\ttranslate < 0, 0, 0>\n\n");
-		    printf("\trotate <90*%g 90*%g 90*%g>\n\n", V3ARGS(tor->h));
-		     printf("\ttranslate < %g, %g, %g>\n}\n", V3ARGS(tor->v));
+		    if( Torusflag == 0 )
+		   { 
+		    printf("#include\"transforms.inc\"\n");
+		    printf("#macro Torus(Center, Normal, Radius1, Radius2)\n\t torus{ Radius1, Radius2 Reorient_Trans(y, Normal) translate Center }\n#end\n\n");
+		    Torusflag = 1;
+		    }
+		    printf(" \nobject {\tTorus (\n");
+		    printf("\t< %g, %g, %g>, ", V3ARGS(tor->v));
+		    printf("<%g, %g, %g>, ", V3ARGS(tor->h));
+		    printf(" %g , ", tor->r_a);
+		    printf("%g )", tor->r_h);
+		    printf(" texture{ pigment{ LightBlue} }}\n");
+		    
+		    
+		     
 		    break;
 		}
 	    case ID_TGC: /* truncated general cone frustum */
@@ -332,10 +340,9 @@ case ID_TOR:	/* torus */
 int
 main(int argc, char *argv[])
 {
-    static const char usage[] = "Usage: %s [-xX lvl] [-a abs_tol] [-r rel_tol] [-n norm_tol] [-o out_file] brlcad_db.g object(s)\n";
+    static const char usage[] = "Usage: %s [-xX lvl] [-a abs_tol] [-r rel_tol] [-n norm_tol] [-o out_file] [-C Camera_loc] [-V Look_at] [-L Light_loc] [-l Light_col] [-D default] brlcad_db.g object(s)\n";
 
     struct user_data your_data = {0, BN_TOL_INIT_ZERO};
-
     int i;
     int c;
     char idbuf[132] = {0};
@@ -354,9 +361,11 @@ main(int argc, char *argv[])
     your_data.tol.dist_sq = your_data.tol.dist * your_data.tol.dist;
     your_data.tol.perp = 1e-6;
     your_data.tol.para = 1 - your_data.tol.perp;
+    
 
     /* Get command line arguments. */
-    while ((c = bu_getopt(argc, argv, "t:a:n:o:r:x:X:")) != -1) {
+    while ((c = bu_getopt(argc, argv, "t:a:n:o:r:x:X:C:V:L:l:c:D")) != -1) {
+	float a1, a2, a3, a4, b1, b2, b3, b4,  c2, c3, c4;
 	switch (c) {
 	    case 't':		/* calculational tolerance */
 		your_data.tol.dist = atof(bu_optarg);
@@ -372,6 +381,40 @@ main(int argc, char *argv[])
 	    case 'X':		/* NMG debug flag */
 		sscanf(bu_optarg, "%x", &RTG.NMG_debug);
 		bu_printb("librt RTG.NMG_debug", RTG.NMG_debug, NMG_DEBUG_FORMAT);
+		bu_log("\n");
+		break;
+	    case 'C':
+		if(sscanf(bu_optarg, "%g, %g", &a1, &b1))
+		{
+			printf("the value of a b c %g, %g ", a1, b1);
+			bu_log("\n");
+		}
+		else
+		{
+		        bu_exit(1, usage, argv[0]);
+		}
+		break;
+	    case 'V':
+		sscanf(bu_optarg, "%g %g %g", &a2, &b2, &c2);
+		printf("Camera View point ");
+		bu_log("\n");
+		break;
+	    case 'L':
+		sscanf(bu_optarg, "%g %g %g", &a3, &b3, &c3);
+		printf("Light");
+		bu_log("\n");
+		break;
+	    case 'l':
+		sscanf(bu_optarg, "%g %g %g", &a4, &b4, &c4);
+		printf("Light colour");
+		bu_log("\n");
+		break;
+	    case 'D':
+		
+		printf("\n#include\"colors.inc\"\n");
+		printf("\nbackground { color Black }\n");
+		printf("camera\n\t{\n\t\tlocation <0, 0, 40>\n\t\tlook_at <0, 0, 0>\n\t\t\t}\n");
+		printf("light_source\n\t{\n\t\t<0, 0, 40> White\n\t\t}\n");
 		bu_log("\n");
 		break;
 	    default:
@@ -400,10 +443,7 @@ main(int argc, char *argv[])
      */
     for (i=bu_optind; i<argc; i++) {
 
-	printf("\n#include\"colors.inc\"\n");
-	printf("\nbackground { color Gray }\n");
-	 printf("camera\n\t{\n\t\tlocation <40, 0, 0>\n\t\tlook_at <0, 0, 0>\n\t\t\t}\n");
-	printf("light_source\n\t{\n\t\t<40, 0, 0> White\n\t\t}\n");
+	
 	db_walk_tree(rtip->rti_dbip, argc - i, (const char **)&argv[i], 1 /* bu_avail_cpus() */,
 		     &init_state, region_start, region_end, primitive_func, (void *) &your_data);
     }
