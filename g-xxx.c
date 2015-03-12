@@ -220,8 +220,9 @@ region_end (struct db_tree_state *tsp,
 
 /*declare torusflag*/
 int torusflag = 0 ;
-
-
+double Vadd[3];
+double maga;
+double magc;
 
 
 /* This routine is called by the tree walker (db_walk_tree)
@@ -265,21 +266,37 @@ primitive_func(struct db_tree_state *tsp,
 		}
 	    case ID_TGC: /* truncated general cone frustum */
 		    {
-		    /* This primitive includes circular cross-section
+		    /* this primitive includes circular cross-section
 		     * cones and cylinders
 		     */
 		    struct rt_tgc_internal *tgc = (struct rt_tgc_internal *)ip->idb_ptr;
-
-		    printf("Write this TGC (name=%s) in your format:\n", dp->d_namep);
-		    printf("\tV=(%g %g %g)\n", V3ARGS(tgc->v));
-		    printf("\tH=(%g %g %g)\n", V3ARGS(tgc->h));
-		    printf("\tA=(%g %g %g)\n", V3ARGS(tgc->a));
-		    printf("\tB=(%g %g %g)\n", V3ARGS(tgc->b));
-		    printf("\tC=(%g %g %g)\n", V3ARGS(tgc->c));
-		    printf("\tD=(%g %g %g)\n", V3ARGS(tgc->d));
+		    VADD2(Vadd, tgc->v,tgc->h);
+		    maga = MAGNITUDE(tgc->a);
+		    magc = MAGNITUDE(tgc->c);
+		    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c))){ 
+		    		printf("\tcylinder\n\t    {\n ");
+		   		printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
+		  		printf("\t<%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+		    		printf("%g\n", maga);
+		    		printf("\t    texture{ pigment{ lightblue } }}\n");
+			     	    }  
+		    else{
+		    		printf("\tCone\n\t    {\n ");
+		    		printf("\t<%g %g %g>,  ", V3ARGS(tgc->v));
+			    	printf("%g,\n", maga);
+		    		printf("\t    <%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+		    		printf("%g\n", magc);
+		   		printf("\t    texture{ pigment{ lightblue } }}\n");
+			}  
 		    break;
-		}
 		    
+
+
+		}
+
+		   
+
+ 
 	    case ID_REC: /* right elliptical cylinder */
 		{
 		    /* This primitive includes circular cross-section
@@ -299,7 +316,7 @@ primitive_func(struct db_tree_state *tsp,
 	    
 
 
-	    case ID_ELL:
+    case ID_ELL:
 	    case ID_SPH:
 		{
 		    /* spheres and ellipsoids */
