@@ -233,6 +233,7 @@ primitive_func(struct db_tree_state *tsp,
 	       struct rt_db_internal *ip,
 	       void *UNUSED(client_data))
 {
+    int i;
     struct directory *dp;
     char *name;
     dp = DB_FULL_PATH_CUR_DIR(pathp);
@@ -329,6 +330,69 @@ primitive_func(struct db_tree_state *tsp,
 		    
 		    break;
 		}
+    case ID_ARB8:       /* convex primitive with from four to six faces */
+                 {
+                     /* this primitive may have degenerate faces
+                      * faces are: 0123, 7654, 0347, 1562, 0451, 3267
+                      * (points listed above in counter-clockwise order)
+                      */
+                     struct rt_arb_internal *arb = (struct rt_arb_internal *)ip->idb_ptr;
+ 
+                     printf("Write this ARB (name=%s) in your format:\n", dp->d_namep);
+                     for (i=0; i<8; i++)
+                         printf("\tpoint #%d: (%g %g %g)\n", i, V3ARGS(arb->pt[i]));
+                     break;
+                 }
+
+
+		/* other primitives, left as an exercise to the reader */
+
+
+	    case ID_BOT:        /* Bag O' Triangles */
+             case ID_ARS:
+                     /* series of curves
+                      * each with the same number of points
+                      */
+             case ID_HALF:
+                     /* half universe defined by a plane */
+             case ID_POLY:
+                     /* polygons (up to 5 vertices per) */
+             case ID_BSPLINE:
+                     /* NURB surfaces */
+             case ID_NMG:
+                     /* N-manifold geometry */
+             case ID_ARBN:
+             case ID_DSP:
+                     /* Displacement map (terrain primitive) */
+                     /* the DSP primitive may reference an external file or binunif object */
+             case ID_HF:
+                     /* height field (terrain primitive) */
+                     /* the HF primitive references an external file */
+             case ID_EBM:
+                     /* extruded bit-map */
+                     /* the EBM primitive references an external file */
+             case ID_VOL:
+                     /* the VOL primitive references an external file */
+             case ID_PIPE:
+             case ID_PARTICLE:
+		{
+		    struct rt_part_internal *part = (struct rt_part_internal *)ip->idb_ptr;
+		    printf("Write this particle (name=%g %g %g) in your format:\n", V3ARGS(part->part_V) );
+		    printf("Write this particle (name=%g %g %g) in your format:\n", V3ARGS(part->part_H) );
+		    printf("Write this particle (name=%g ) in your format:\n", part->part_vrad );
+		    printf("Write this particle (name=%g ) in your format:\n", part->part_hrad );
+		    }
+             case ID_RPC:
+             case ID_RHC:
+             case ID_EPA:
+             case ID_EHY:
+             case ID_ETO:
+             case ID_GRIP:
+            case ID_SKETCH:
+             case ID_EXTRUDE:
+                     /* note that an extrusion references a sketch, make sure you convert
+                      * the sketch also
+                    */
 	    
 
 		/* other primitives, left as an exercise to the reader */
