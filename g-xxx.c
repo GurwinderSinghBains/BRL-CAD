@@ -38,16 +38,11 @@
 #include "vmath.h"
 #include "bu/getopt.h"
 #include "nmg.h"
-#include "rtgeom.h"
+#include "rt/geom.h"
 #include "raytrace.h"
 #include "wdb.h"
 
 
-/*
- * data container for your data.  you create one of these with
- * whatever fields you need.  it gets passed to all of the callback
- * functions for your application use as a client_data pointer.
- */
 struct user_data {
     long int data;
     struct bn_tol tol;
@@ -377,10 +372,11 @@ primitive_func(struct db_tree_state *tsp,
              case ID_PARTICLE:
 		{
 		    struct rt_part_internal *part = (struct rt_part_internal *)ip->idb_ptr;
-		    printf("Write this particle (name=%g %g %g) in your format:\n", V3ARGS(part->part_V) );
-		    printf("Write this particle (name=%g %g %g) in your format:\n", V3ARGS(part->part_H) );
-		    printf("Write this particle (name=%g ) in your format:\n", part->part_vrad );
-		    printf("Write this particle (name=%g ) in your format:\n", part->part_hrad );
+		    printf("object{\n\t Round_Cone2(\n");
+		    printf("\t\t<%g %g %g>,", V3ARGS(part->part_V) );
+		    printf(" %g,\n", part->part_vrad );
+		    printf("\t\t <%g %g %g>,", V3ARGS(part->part_H) );
+		    printf(" %g, 0)\n}\n", part->part_hrad );
 		    }
              case ID_RPC:
              case ID_RHC:
