@@ -372,6 +372,7 @@ primitive_func(struct db_tree_state *tsp,
              case ID_PARTICLE:
 		{
 		    struct rt_part_internal *part = (struct rt_part_internal *)ip->idb_ptr;
+		    printf("#include \"shapes.inc\"\n");
 		    printf("object{\n\t Round_Cone2(\n");
 		    printf("\t\t<%g %g %g>,", V3ARGS(part->part_V) );
 		    printf(" %g,\n", part->part_vrad );
