@@ -313,7 +313,14 @@ primitive_func(struct db_tree_state *tsp,
 
 
     case ID_ELL:
-	    case ID_SPH:
+    {
+    	struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
+    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
+    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->a));
+    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->b));
+    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->c));
+    }
+	case ID_SPH:
 		{
 		    /* spheres and ellipsoids */
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
