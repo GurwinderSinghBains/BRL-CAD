@@ -314,7 +314,8 @@ primitive_func(struct db_tree_state *tsp,
 
     case ID_ELL:
     {
-    	struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
+		    /* spheres and ellipsoids */
+		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
 		    maga = MAGNITUDE(ell->a);
 		    magb = MAGNITUDE(ell->b);
 		    magc = MAGNITUDE(ell->c);
@@ -324,8 +325,9 @@ primitive_func(struct db_tree_state *tsp,
 		    printf(" %g ,", magb);
 		    printf(" %g > )", magc);
 		    printf(" pigment{ LightBlue}\n\t}\n");
+		    
 		    break;
-    }
+		}
 	case ID_SPH:
 		{
 		    /* spheres and ellipsoids */
