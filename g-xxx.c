@@ -315,10 +315,16 @@ primitive_func(struct db_tree_state *tsp,
     case ID_ELL:
     {
     	struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
-    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
-    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->a));
-    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->b));
-    	printf("\t<%g, %g, %g>,\n", V3ARGS(ell->c));
+		    maga = MAGNITUDE(ell->a);
+		    magb = MAGNITUDE(ell->b);
+		    magc = MAGNITUDE(ell->c);
+		    printf("#include \"shapes.inc\"\nobject{\n\t\tSpheroid(\n");
+		    printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
+		    printf("< %g ,", maga);
+		    printf(" %g ,", magb);
+		    printf(" %g > )", magc);
+		    printf(" pigment{ LightBlue}\n\t}\n");
+		    break;
     }
 	case ID_SPH:
 		{
