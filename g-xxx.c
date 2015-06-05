@@ -321,8 +321,8 @@ primitive_func(struct db_tree_state *tsp,
 		    magc = MAGNITUDE(ell->c);
 		    printf("#include \"shapes.inc\"\nobject{\n\t\tSpheroid(\n");
 		    printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
-		    printf("< %g ,", maga);
-		    printf(" %g ,", magb);
+		    printf("< %g ,", magb);
+		    printf(" %g ,", maga);
 		    printf(" %g > )", magc);
 		    printf(" pigment{ LightBlue}\n\t}\n");
 		    
