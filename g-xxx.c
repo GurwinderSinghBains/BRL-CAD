@@ -214,10 +214,11 @@ region_end (struct db_tree_state *tsp,
 }
 
 /*declare torusflag*/
-int torusflag = 0 ;
+int flag = 0 ;
 double Vadd[3];
 double maga;
 double magc;
+double magb;
 
 
 /* This routine is called by the tree walker (db_walk_tree)
@@ -247,10 +248,10 @@ primitive_func(struct db_tree_state *tsp,
 	    case ID_TOR:	/* torus */
 		{ 
 		    struct rt_tor_internal *tor = (struct rt_tor_internal *)ip->idb_ptr;
-		    if ( torusflag == 0 )
+		    if ( flag == 0 )
 		    {
 		    torusmacro();
-		    torusflag = 1;
+		    flag = 1;
 		    }
 		    printf(" \nobject {\tTorus (\n");
 		    printf("\t< %g, %g, %g>, ", V3ARGS(tor->v));
@@ -261,7 +262,7 @@ primitive_func(struct db_tree_state *tsp,
 		    break;
 		}
 	    case ID_TGC: /* truncated general cone frustum */
-		    {
+		{
 		    /* this primitive includes circular cross-section
 		     * cones and cylinders
 		     */
@@ -270,36 +271,29 @@ primitive_func(struct db_tree_state *tsp,
 		    maga = MAGNITUDE(tgc->a);
 		    magc = MAGNITUDE(tgc->c);
 		    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c))){ 
-		    		printf("\tcylinder\n\t    {\n ");
-		   		printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
-		  		printf("\t<%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
-		    		printf("%g\n", maga);
-		    		printf("\t    texture{ pigment{ lightblue } }}\n");
-			     	    }  
-		    else{
-		    		printf("\tCone\n\t    {\n ");
-		    		printf("\t<%g %g %g>,  ", V3ARGS(tgc->v));
-			    	printf("%g,\n", maga);
-		    		printf("\t    <%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
-		    		printf("%g\n", magc);
-		   		printf("\t    texture{ pigment{ lightblue } }}\n");
-			}  
-		    break;
-		    
-
-
+		    printf("\tcylinder\n\t    {\n ");
+		   	printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
+		  	printf("\t<%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+		    printf("%g\n", maga);
+		    printf("\t    texture{ pigment{ lightblue } }}\n");
+		}  
+		else
+		{
+			printf("\tCone\n\t    {\n ");
+			printf("\t<%g %g %g>,  ", V3ARGS(tgc->v));
+		  	printf("%g,\n", maga);
+			printf("\t    <%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+			printf("%g\n", magc);
+			printf("\t    texture{ pigment{ lightblue } }}\n");
+		}  
+		break;
 		}
-
-		   
-
- 
 	    case ID_REC: /* right elliptical cylinder */
 		{
 		    /* This primitive includes circular cross-section
 		     * cones and cylinders
 		     */
 		    struct rt_tgc_internal *tgc = (struct rt_tgc_internal *)ip->idb_ptr;
-
 		    printf("Write this TGC (name=%s) in your format:\n", dp->d_namep);
 		    printf("\tV=(%g %g %g)\n", V3ARGS(tgc->v));
 		    printf("\tH=(%g %g %g)\n", V3ARGS(tgc->h));
@@ -309,11 +303,8 @@ primitive_func(struct db_tree_state *tsp,
 		    printf("\tD=(%g %g %g)\n", V3ARGS(tgc->d));
 		    break;
 		}
-	    
-
-
-    case ID_ELL:
-    {
+        case ID_ELL:
+        {
 		    /* spheres and ellipsoids */
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
 		    maga = MAGNITUDE(ell->a);
@@ -325,66 +316,62 @@ primitive_func(struct db_tree_state *tsp,
 		    printf(" %g ,", maga);
 		    printf(" %g > )", magc);
 		    printf(" pigment{ LightBlue}\n\t}\n");
-		    
 		    break;
 		}
-	case ID_SPH:
+	    case ID_SPH:
 		{
 		    /* spheres and ellipsoids */
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
-		    
 		    printf("sphere{\n");
 		    printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
 		    printf("\t %g \n//%g%g\n", V3ARGS(ell->a));
 		    printf(" pigment{ LightBlue}\n\t}\n");
-		    
 		    break;
 		}
-    case ID_ARB8:       /* convex primitive with from four to six faces */
-                 {
-                     /* this primitive may have degenerate faces
-                      * faces are: 0123, 7654, 0347, 1562, 0451, 3267
-                      * (points listed above in counter-clockwise order)
-                      */
-                     struct rt_arb_internal *arb = (struct rt_arb_internal *)ip->idb_ptr;
+        case ID_ARB8:       /* convex primitive with from four to six faces */
+		{
+		    /* this primitive may have degenerate faces
+		    * faces are: 0123, 7654, 0347, 1562, 0451, 3267
+		    * (points listed above in counter-clockwise order)
+		    */
+		    struct rt_arb_internal *arb = (struct rt_arb_internal *)ip->idb_ptr;
  
-                     printf("Write this ARB (name=%s) in your format:\n", dp->d_namep);
-                     for (i=0; i<8; i++)
-                         printf("\tpoint #%d: (%g %g %g)\n", i, V3ARGS(arb->pt[i]));
-                     break;
-                 }
+		    printf("Write this ARB (name=%s) in your format:\n", dp->d_namep);
+		    for (i=0; i<8; i++)
+		    printf("\tpoint #%d: (%g %g %g)\n", i, V3ARGS(arb->pt[i]));
+		    break;
+		}
 
 
 		/* other primitives, left as an exercise to the reader */
 
-
-	    case ID_BOT:        /* Bag O' Triangles */
-             case ID_ARS:
-                     /* series of curves
-                      * each with the same number of points
-                      */
-             case ID_HALF:
+		case ID_BOT:        /* Bag O' Triangles */
+		case ID_ARS:
+		    /* series of curves
+		    * each with the same number of points
+		    */
+		case ID_HALF:
                      /* half universe defined by a plane */
-             case ID_POLY:
-                     /* polygons (up to 5 vertices per) */
-             case ID_BSPLINE:
-                     /* NURB surfaces */
-             case ID_NMG:
-                     /* N-manifold geometry */
-             case ID_ARBN:
-             case ID_DSP:
-                     /* Displacement map (terrain primitive) */
-                     /* the DSP primitive may reference an external file or binunif object */
-             case ID_HF:
-                     /* height field (terrain primitive) */
-                     /* the HF primitive references an external file */
-             case ID_EBM:
-                     /* extruded bit-map */
-                     /* the EBM primitive references an external file */
-             case ID_VOL:
-                     /* the VOL primitive references an external file */
-             case ID_PIPE:
-             case ID_PARTICLE:
+		case ID_POLY:
+		    /* polygons (up to 5 vertices per) */
+		case ID_BSPLINE:
+		   /* NURB surfaces */
+		case ID_NMG:
+		   /* N-manifold geometry */
+		case ID_ARBN:
+		case ID_DSP:
+		   /* Displacement map (terrain primitive) */
+		   /* the DSP primitive may reference an external file or binunif object */
+		case ID_HF:
+		   /* height field (terrain primitive) */
+		   /* the HF primitive references an external file */
+		case ID_EBM:
+		   /* extruded bit-map */
+		   /* the EBM primitive references an external file */
+		case ID_VOL:
+		   /* the VOL primitive references an external file */
+		case ID_PIPE:
+		case ID_PARTICLE:
 		{
 		    struct rt_part_internal *part = (struct rt_part_internal *)ip->idb_ptr;
 		    printf("#include \"shapes.inc\"\n");
@@ -393,18 +380,18 @@ primitive_func(struct db_tree_state *tsp,
 		    printf(" %g,\n", part->part_vrad );
 		    printf("\t\t <%g %g %g>,", V3ARGS(part->part_H) );
 		    printf(" %g, 0)\n}\n", part->part_hrad );
-		    }
-             case ID_RPC:
-             case ID_RHC:
-             case ID_EPA:
-             case ID_EHY:
-             case ID_ETO:
-             case ID_GRIP:
-            case ID_SKETCH:
-             case ID_EXTRUDE:
-                     /* note that an extrusion references a sketch, make sure you convert
-                      * the sketch also
-                    */
+		}
+		case ID_RPC:
+		case ID_RHC:
+		case ID_EPA:
+		case ID_EHY:
+		case ID_ETO:
+		case ID_GRIP:
+		case ID_SKETCH:
+		case ID_EXTRUDE:
+		    /* note that an extrusion references a sketch, make sure you convert
+		    * the sketch also
+		    */
 	    
 
 		/* other primitives, left as an exercise to the reader */
