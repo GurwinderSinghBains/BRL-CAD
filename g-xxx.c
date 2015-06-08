@@ -335,11 +335,36 @@ primitive_func(struct db_tree_state *tsp,
 		    * (points listed above in counter-clockwise order)
 		    */
 		    struct rt_arb_internal *arb = (struct rt_arb_internal *)ip->idb_ptr;
- 
-		    printf("Write this ARB (name=%s) in your format:\n", dp->d_namep);
-		    for (i=0; i<8; i++)
-		    printf("\tpoint #%d: (%g %g %g)\n", i, V3ARGS(arb->pt[i]));
-		    break;
+		    printf("#declare Default_texture = pigment {rgb 0.8}\n");
+		    printf("//Write this ARB (name=%s) in your format:\n", dp->d_namep);
+		    printf("#declare a = <%g, %g, %g>;\n", V3ARGS(arb->pt[0]));
+		    printf("#declare b = <%g, %g, %g>;\n", V3ARGS(arb->pt[1]));
+		    printf("#declare c = <%g, %g, %g>;\n", V3ARGS(arb->pt[2]));
+		    printf("#declare d = <%g, %g, %g>;\n", V3ARGS(arb->pt[3]));
+		    printf("#declare e = <%g, %g, %g>;\n", V3ARGS(arb->pt[4]));
+		    printf("#declare f = <%g, %g, %g>;\n", V3ARGS(arb->pt[5]));
+		    printf("#declare g = <%g, %g, %g>;\n", V3ARGS(arb->pt[6]));
+		    printf("#declare h = <%g, %g, %g>;\n", V3ARGS(arb->pt[7]));
+		    printf("#declare Box = mesh{\n");
+		    printf("triangle{a,b,c}\n");
+		    printf("triangle{a,c,d}\n");
+		    printf("triangle{a,d,f}\n");
+		    printf("triangle{e,d,f}\n");
+		    printf("triangle{c,d,e}\n");
+		    printf("triangle{c,e,h}\n");
+		    printf("triangle{a,b,g}\n");
+		    printf("triangle{a,f,g}\n");
+		    printf("triangle{b,c,g}\n");
+		    printf("triangle{g,h,c}\n");
+		    printf("triangle{e,f,g}\n");
+		    printf("triangle{e,g,h}\n");
+		    printf("texture{Default_texture}\n}\n Box\n");
+
+		    /*for (i=0; i<8; i++)
+		    *printf("\tpoint #%d: (%g %g %g)\n", i, V3ARGS(arb->pt[i]));
+		    *break;
+			*/
+			break;
 		}
 
 
