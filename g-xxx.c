@@ -217,8 +217,9 @@ region_end (struct db_tree_state *tsp,
 int flag = 0 ;
 double Vadd[3];
 double maga;
-double magc;
 double magb;
+double magc;
+double magd;
 
 
 /* This routine is called by the tree walker (db_walk_tree)
@@ -269,7 +270,9 @@ primitive_func(struct db_tree_state *tsp,
 		    struct rt_tgc_internal *tgc = (struct rt_tgc_internal *)ip->idb_ptr;
 		    VADD2(Vadd, tgc->v,tgc->h);
 		    maga = MAGNITUDE(tgc->a);
+		    magb = MAGNITUDE(tgc->b);
 		    magc = MAGNITUDE(tgc->c);
+		    magd = MAGNITUDE(tgc->d);
 		    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c))){ 
 		    printf("\tcylinder\n\t    {\n ");
 		   	printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
@@ -277,14 +280,23 @@ primitive_func(struct db_tree_state *tsp,
 		    printf("%g\n", maga);
 		    printf("\t    texture{ pigment{ lightblue } }}\n");
 		}  
-		else
+		else if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->b)))
 		{
 			printf("\tCone\n\t    {\n ");
 			printf("\t<%g %g %g>,  ", V3ARGS(tgc->v));
 		  	printf("%g,\n", maga);
-			printf("\t    <%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+			printf("\t    <%g %g %g>,  ", V3ARGS(tgc->h));
 			printf("%g\n", magc);
 			printf("\t    texture{ pigment{ lightblue } }}\n");
+		}  
+		else
+		{	printf("#include \"shapes.inc\"\n");
+			printf("\tobject{ Supercone(\n");
+			printf("\t<%g, %g, %g>,  ", V3ARGS(tgc->v));
+		  	printf("%g, %g ,\n", maga, magb);
+			printf("<%g, %g, %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
+			printf("%g, %g)", magc, magd);
+			printf("\t    texture{ pigment{ color rgb<0.65,1,0> } }}\n");
 		}  
 		break;
 		}
