@@ -267,20 +267,21 @@ primitive_func(struct db_tree_state *tsp,
 		    /* this primitive includes circular cross-section
 		     * cones and cylinders
 		     */
-		    struct rt_tgc_internal *tgc = (struct rt_tgc_internal *)ip->idb_ptr;
-		    VADD2(Vadd, tgc->v,tgc->h);
-		    maga = MAGNITUDE(tgc->a);
-		    magb = MAGNITUDE(tgc->b);
-		    magc = MAGNITUDE(tgc->c);
-		    magd = MAGNITUDE(tgc->d);
-		    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c))){ 
+	    struct rt_tgc_internal *tgc = (struct rt_tgc_internal *)ip->idb_ptr;
+	    VADD2(Vadd, tgc->v,tgc->h);
+	    maga = MAGNITUDE(tgc->a);
+	    magb = MAGNITUDE(tgc->b);
+	    magc = MAGNITUDE(tgc->c);
+	    magd = MAGNITUDE(tgc->d);
+	    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c)))     /* Cylinder */
+	    { 
 		    printf("\tcylinder\n\t    {\n ");
 		   	printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
 		  	printf("\t<%g %g %g>,  ", Vadd[0], Vadd[1],Vadd[2]);
 		    printf("%g\n", maga);
 		    printf("\t    texture{ pigment{ lightblue } }}\n");
 		}  
-		else if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->b)))
+		else if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->b))) /* Cone */
 		{
 			printf("\tCone\n\t    {\n ");
 			printf("\t<%g %g %g>,  ", V3ARGS(tgc->v));
@@ -317,7 +318,7 @@ primitive_func(struct db_tree_state *tsp,
 		}
         case ID_ELL:
         {
-		    /* spheres and ellipsoids */
+		    /* ellipsoids */
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
 		    maga = MAGNITUDE(ell->a);
 		    magb = MAGNITUDE(ell->b);
@@ -332,7 +333,7 @@ primitive_func(struct db_tree_state *tsp,
 		}
 	    case ID_SPH:
 		{
-		    /* spheres and ellipsoids */
+		    /* spheres*/
 		    struct rt_ell_internal *ell = (struct rt_ell_internal *)ip->idb_ptr;
 		    printf("sphere{\n");
 		    printf("\t<%g, %g, %g>,\n", V3ARGS(ell->v));
@@ -401,6 +402,7 @@ primitive_func(struct db_tree_state *tsp,
 		    printf(" %g,\n", part->part_vrad );
 		    printf("\t\t <%g %g %g>,", V3ARGS(part->part_H) );
 		    printf(" %g, 0)\n}\n", part->part_hrad );
+		    break;
 		}
 		case ID_RPC:
 		case ID_RHC:
