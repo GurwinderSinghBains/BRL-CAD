@@ -1,4 +1,4 @@
-/*                         G - P O V . C
+/*                         G - X X X . C
  * BRL-CAD
  *
  * Copyright (c) 1993-2014 United States Government as represented by
@@ -18,7 +18,7 @@
  * information.
  *
  */
-/** @file conv/g-pov.c
+/** @file conv/g-xxx.c
  *
  * Sample code for converting BRL-CAD models to some other format.
  * This code assumes that your receiving format can handle CSG
@@ -47,16 +47,6 @@ struct user_data {
     long int data;
     struct bn_tol tol;
 };
-
-/*
-
-torus macro
-
-*/
-
-
-void torusmacro();
-
 
 /* This routine just produces an ascii description of the Boolean tree.
  * In a real converter, this would output the tree in the desired format.
@@ -251,7 +241,9 @@ primitive_func(struct db_tree_state *tsp,
 		    struct rt_tor_internal *tor = (struct rt_tor_internal *)ip->idb_ptr;
 		    if ( flag == 0 )
 		    {
-		    torusmacro();
+		    printf("#include\"transforms.inc\"\n");
+		    printf("#macro Torus(Center, Normal, Radius1, Radius2)\n");
+		    printf("\t torus{ Radius1, Radius2 Reorient_Trans(y, Normal) translate Center }\n#end\n\n");
 		    flag = 1;
 		    }
 		    printf(" \nobject {\tTorus (\n");
@@ -273,7 +265,7 @@ primitive_func(struct db_tree_state *tsp,
 	    magb = MAGNITUDE(tgc->b);
 	    magc = MAGNITUDE(tgc->c);
 	    magd = MAGNITUDE(tgc->d);
-	    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c)))     /* Cylinder */
+	    if(EQUAL(MAGNITUDE(tgc->a), MAGNITUDE(tgc->c)))     /* Cylender */
 	    { 
 		    printf("\tcylinder\n\t    {\n ");
 		   	printf("\t<%g %g %g>,\n", V3ARGS(tgc->v));
@@ -560,20 +552,6 @@ main(int argc, char *argv[])
 
     return 0;
 }
-
-
-void torusmacro()
-{
-
-
-		   { 
-		    printf("#include\"transforms.inc\"\n");
-		    printf("#macro Torus(Center, Normal, Radius1, Radius2)\n");
-		    printf("\t torus{ Radius1, Radius2 Reorient_Trans(y, Normal) translate Center }\n#end\n\n");
-		    }
-
-}
-
 
 /*
  * Local Variables:
