@@ -397,6 +397,15 @@ primitive_func(struct db_tree_state *tsp,
 		    break;
 		}
 		case ID_RPC:
+		{
+			struct rt_rpc_internal *rpc = (struct rt_rpc_internal *)ip->idb_ptr;
+			printf("<%g %g %g>", V3ARGS(rpc->rpc_V));
+			printf("<%g %g %g>", V3ARGS(rpc->rpc_H));
+			printf("<%g %g %g>", V3ARGS(rpc->rpc_B));
+			printf("<  %g>", rpc->rpc_r);
+
+			break;
+		}
 		case ID_RHC:
 		{
 			struct rt_rhc_internal *rhc = (struct rt_rhc_internal *)ip->idb_ptr;
@@ -409,7 +418,27 @@ primitive_func(struct db_tree_state *tsp,
 			break;
 		}
 		case ID_EPA:
+		{
+			struct rt_epa_internal *epa = (struct rt_epa_internal *)ip->idb_ptr;
+			printf("<%g %g %g>", V3ARGS(epa->epa_V));
+			printf("<%g %g %g>", V3ARGS(epa->epa_H));
+			printf("<  %g>", epa->epa_r1);
+			printf("<%g>", epa->epa_r2);
+
+			break;
+		}
 		case ID_EHY:
+		{
+			struct rt_ehy_internal *ehy = (struct rt_ehy_internal *)ip->idb_ptr;
+			printf("<%g %g %g>", V3ARGS(ehy->ehy_V));
+			printf("<%g %g %g>", V3ARGS(ehy->ehy_H));
+			printf("<%g %g %g>", V3ARGS(ehy->ehy_Au));
+			printf("<%g>", ehy->ehy_c);
+			printf("<  %g>", ehy->ehy_r1);
+			printf("<%g>", ehy->ehy_r2);
+
+			break;
+		}
 		case ID_ETO:
 		case ID_GRIP:
 		case ID_SKETCH:
