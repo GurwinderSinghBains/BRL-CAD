@@ -357,14 +357,20 @@ primitive_func(struct db_tree_state *tsp,
 		}
 
 		/* other primitives, left as an exercise to the reader */
-
 		case ID_BOT:        /* Bag O' Triangles */
 		case ID_ARS:
 		    /* series of curves
 		    * each with the same number of points
 		    */
-		case ID_HALF:
-                     /* half universe defined by a plane */
+		case ID_HALF:   /* half universe defined by a plane */
+		{
+		    /* spheres*/
+		    struct rt_half_internal *half = (struct rt_half_internal *)ip->idb_ptr;
+		    printf("plane{\n");
+		    printf("\t<%g, %g, %g>,\n", V3ARGS(half->eqn));
+		    printf("\t %g}", half->eqn[3]);
+		    break;
+		}
 		case ID_POLY:
 		    /* polygons (up to 5 vertices per) */
 		case ID_BSPLINE:
@@ -440,6 +446,26 @@ primitive_func(struct db_tree_state *tsp,
 			break;
 		}
 		case ID_ETO:
+		{
+			struct rt_eto_internal *eto = (struct rt_eto_internal *)ip->idb_ptr;
+		    if ( flag == 0 )
+		    {
+		    printf("#include \"functions.inc\"\n");
+		    printf("isosurface {function { f_torus(x,y,z,1*(y+0.4),0.1 )}");
+		    printf("max_gradient 2\ntranslate<0, 0, 0>\npigment {rgb .9}");
+        	printf("finish {phong 0.5 phong_size 10}}");
+		    flag = 1;
+		    }
+		    printf(" \nobject {\tTorus (\n");
+		    printf("\t< %g, %g, %g>, ", V3ARGS(eto->eto_V));
+		    printf("<%g, %g, %g>, ", V3ARGS(eto->eto_N));
+		    printf("<%g, %g, %g>, ", V3ARGS(eto->eto_C));
+		    printf(" %g , ", eto->eto_r);
+		    printf("%g )", eto->eto_rd);
+		    printf(" texture{ pigment{ LightBlue} }}\n");
+
+			break;
+		}
 		case ID_GRIP:
 		case ID_SKETCH:
 		case ID_EXTRUDE:
