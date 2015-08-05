@@ -221,6 +221,7 @@ primitive_func(struct db_tree_state *tsp,
 	       void *UNUSED(client_data))
 {
     int i;
+    size_t j;
     struct directory *dp;
     char *name;
     dp = DB_FULL_PATH_CUR_DIR(pathp);
@@ -378,6 +379,18 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_NMG:
 		   /* N-manifold geometry */
 		case ID_ARBN:
+		{
+			struct rt_arbn_internal *arbn= (struct rt_arbn_internal *)ip->idb_ptr;
+			printf("intersection{\n");
+			for (j = 0; j < arbn->neqn; j++) {
+            printf("plane{ <%g, %g, %g>, %g\n pigment {\n color LightBlue}}\n",
+                    arbn->eqn[j][X], arbn->eqn[j][Y],
+                    arbn->eqn[j][Z], arbn->eqn[j][3]);
+	        }
+	        printf("}\n");
+			break;
+		}
+
 		case ID_DSP:
 		   /* Displacement map (terrain primitive) */
 		   /* the DSP primitive may reference an external file or binunif object */
@@ -390,6 +403,15 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_VOL:
 		   /* the VOL primitive references an external file */
 		case ID_PIPE:
+		{
+			/*struct rt_pipe_internal *pipe= (struct rt_pipe_internal *)ip->idb_ptr;
+			printf("%g\n", &pint->pipe_segs_head );
+			printf("%g\n", pip->pp_od);
+			printf("%g\n", pip->pp_id);
+			printf("%g\n", pipept->pp_bendradius );
+			printf("\t<%g, %g, %g>,\n", V3ARGS(p1));*/
+
+		}
 		case ID_PARTICLE:
 		{
 		    struct rt_part_internal *part = (struct rt_part_internal *)ip->idb_ptr;
@@ -426,6 +448,7 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_EPA:
 		{
 			struct rt_epa_internal *epa = (struct rt_epa_internal *)ip->idb_ptr;
+			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 }\n");
 			printf("<%g %g %g>", V3ARGS(epa->epa_V));
 			printf("<%g %g %g>", V3ARGS(epa->epa_H));
 			printf("<  %g>", epa->epa_r1);
@@ -436,6 +459,7 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_EHY:
 		{
 			struct rt_ehy_internal *ehy = (struct rt_ehy_internal *)ip->idb_ptr;
+			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 }\n");
 			printf("<%g %g %g>", V3ARGS(ehy->ehy_V));
 			printf("<%g %g %g>", V3ARGS(ehy->ehy_H));
 			printf("<%g %g %g>", V3ARGS(ehy->ehy_Au));
