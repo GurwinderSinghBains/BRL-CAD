@@ -359,6 +359,16 @@ primitive_func(struct db_tree_state *tsp,
 
 		/* other primitives, left as an exercise to the reader */
 		case ID_BOT:        /* Bag O' Triangles */
+		{
+			struct rt_bot_internal *bot = (struct rt_bot_internal *)ip->idb_ptr;
+			for (j = 0; j < bot->num_vertices; j++)
+                printf("#declare t%lu = <%g, %g, %g>;\n",j, V3ARGS(&bot->vertices[j*3]));
+	        printf("union{\n");
+            for (j = 0; j < bot->num_faces; j++)
+                printf("triangle{ t%d, t%d, t%d}\n", V3ARGS(&bot->faces[j*3]));
+            printf("pigment { \ncolor LightBlue }\n}");
+        	break;
+		}
 		case ID_ARS:
 		    /* series of curves
 		    * each with the same number of points
@@ -448,24 +458,24 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_EPA:
 		{
 			struct rt_epa_internal *epa = (struct rt_epa_internal *)ip->idb_ptr;
-			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 }\n");
-			printf("<%g %g %g>", V3ARGS(epa->epa_V));
-			printf("<%g %g %g>", V3ARGS(epa->epa_H));
-			printf("<  %g>", epa->epa_r1);
-			printf("<%g>", epa->epa_r2);
+			maga = MAGNITUDE(epa->epa_H);
+			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 \n");
+			printf("translate <%g, %g, %g>", V3ARGS(epa->epa_V));
+			printf("clipped_by{ plane{<%g, %g, %g>,", V3ARGS(epa->epa_H));
+			printf("%g }} \n",maga );
+			printf("pigment { \ncolor LightBlue}\n}\n");
 
 			break;
 		}
 		case ID_EHY:
 		{
 			struct rt_ehy_internal *ehy = (struct rt_ehy_internal *)ip->idb_ptr;
-			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 }\n");
-			printf("<%g %g %g>", V3ARGS(ehy->ehy_V));
-			printf("<%g %g %g>", V3ARGS(ehy->ehy_H));
-			printf("<%g %g %g>", V3ARGS(ehy->ehy_Au));
-			printf("<%g>", ehy->ehy_c);
-			printf("<  %g>", ehy->ehy_r1);
-			printf("<%g>", ehy->ehy_r2);
+			maga = MAGNITUDE(ehy->ehy_H);
+			printf("quadric { < 1, 0, 1> , <0, 0, 0>, < 0, -1 , 0>, 0 \n");
+			printf("translate <%g, %g, %g>\n", V3ARGS(ehy->ehy_V));
+			printf("clipped_by {plane{<%g, %g, %g>,  ", V3ARGS(ehy->ehy_H));
+			printf("%g }} \n",maga );
+			printf("pigment { \ncolor LightBlue}\n}\n");
 
 			break;
 		}
