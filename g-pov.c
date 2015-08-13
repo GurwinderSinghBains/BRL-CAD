@@ -437,22 +437,15 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_RPC:
 		{
 			struct rt_rpc_internal *rpc = (struct rt_rpc_internal *)ip->idb_ptr;
-			printf("<%g %g %g>", V3ARGS(rpc->rpc_V));
-			printf("<%g %g %g>", V3ARGS(rpc->rpc_H));
-			printf("<%g %g %g>", V3ARGS(rpc->rpc_B));
-			printf("<  %g>", rpc->rpc_r);
-
+			printf("isosurface {\nfunction { pow(x,2) + y }\n");
+			printf("translate<%g, %g, %g>", V3ARGS(rpc->rpc_V));
 			break;
 		}
 		case ID_RHC:
 		{
 			struct rt_rhc_internal *rhc = (struct rt_rhc_internal *)ip->idb_ptr;
-			printf("<%g %g %g>", V3ARGS(rhc->rhc_V));
-			printf("<%g %g %g>", V3ARGS(rhc->rhc_H));
-			printf("<%g %g %g>", V3ARGS(rhc->rhc_B));
-			printf("<  %g>", rhc->rhc_r);
-			printf("<%g>", rhc->rhc_c);
-
+			printf("isosurface {\nfunction { pow(x,2) + y }\n");
+			printf("translate<%g, %g, %g>", V3ARGS(rhc->rhc_V));
 			break;
 		}
 		case ID_EPA:
