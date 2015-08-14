@@ -496,6 +496,15 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_GRIP:
 		case ID_SKETCH:
 		case ID_EXTRUDE:
+		{
+			struct rt_extrude_internal *extr = (struct rt_extrude_internal *)ip->idb_ptr;
+			printf("%s ", extr->sketch_name);
+		    printf("%g, %g, %g", V3ARGS(extr->V));
+		    printf("%g, %g, %g ", V3ARGS(extr->h));
+		    printf("%g, %g, %g ", V3ARGS(extr->u_vec));
+		    printf("%g, %g, %g", V3ARGS(extr->v_vec));
+		    break;
+		}
 		    /* note that an extrusion references a sketch, make sure you convert
 		    * the sketch also
 		    */
