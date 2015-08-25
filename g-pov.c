@@ -354,6 +354,7 @@ primitive_func(struct db_tree_state *tsp,
 			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->xdir));
 			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->ydir));
 			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->zdir));
+			printf("%g\n", hip->d);
 		    break;
 		}
         case ID_ARB8:       /* convex primitive with from four to six faces */
