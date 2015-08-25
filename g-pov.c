@@ -223,6 +223,7 @@ double maga;
 double magb;
 double magc;
 double magd;
+double Xdir, Ydir, Zdir;
 
 
 /* This routine is called by the tree walker (db_walk_tree)
@@ -349,7 +350,7 @@ primitive_func(struct db_tree_state *tsp,
 		}
 		case ID_HRT:
 		{
-		    struct rt_hrt_internal *hrt = (struct rt_ell_internal *)ip->idb_ptr;
+		    struct rt_hrt_internal *hrt = (struct rt_hrt_internal *)ip->idb_ptr;
             Xdir = MAGNITUDE(hrt->xdir);
             Ydir = MAGNITUDE(hrt->ydir);
             Zdir = MAGNITUDE(hrt->zdir);
@@ -358,7 +359,7 @@ primitive_func(struct db_tree_state *tsp,
 		    printf("< %g ,", Xdir);
 		    printf(" %g ,", Ydir);
 		    printf(" %g > )", Zdir);
-		    printf(" %g , ", d);
+		    printf(" %g , ", hrt->d);
 		    printf(" pigment{ LightBlue}\n\t}\n");
 
 
