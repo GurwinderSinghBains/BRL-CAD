@@ -350,7 +350,10 @@ primitive_func(struct db_tree_state *tsp,
 		case ID_HRT:
 		{
 			struct rt_hrt_internal *hip = (struct rt_hrt_internal *)ip->idb_ptr;
-			
+			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->v));
+			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->xdir));
+			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->ydir));
+			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->zdir));
 		    break;
 		}
         case ID_ARB8:       /* convex primitive with from four to six faces */
