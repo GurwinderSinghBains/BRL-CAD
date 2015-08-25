@@ -31,7 +31,7 @@
 g-pov \- Persistence of Vision Raytracing (BRL\-CAD to POV)
 .SH "SYNOPSIS"
 .HP \w'\fBg\-pov\fR\ 'u
-\fBg\-pov\fR [\-o\ \fIoutput_file\fR] [\-m\ \fIoutput_directory\fR] [\-b] [\-P\ \fInum_cpus\fR] [\-i] [\-8] [\-D\ \fIcalculation_tolerance\fR] [\-a\ \fIabsolute_tol\fR] [\-r\ \fIrelative_tol\fR] [\-n\ \fInormal_tol\fR] [\-xX\ \fIlevel\fR] [\-v] [\-C\ \fICamera_loc\fR] [\-V\ \fIView point\fR] [\-L\ \fILight_loc\fR] [\-l\ \fILight_col\fR] \fIdatabase\&.g\fR \fIobject(s)\fR...
+\fBg\-pov\fR [\-o\ \fIoutput_file\fR] [\-m\ \fIoutput_directory\fR] [\-C\ \fICamera_loc\fR] [\-V\ \fIView point\fR] [\-L\ \fILight_loc\fR] [\-l\ \fILight_col\fR] \fIdatabase\&.g\fR \fIobject(s)\fR...
 .SH "DESCRIPTION"
 .PP
 \fIg\-pov\fR
@@ -61,7 +61,7 @@ options are mutually exclusive\&.
 .PP
 \fB\-b\fR
 .RS 4
-Write output as a binary STL file\&. The default is ASCII\&. In the case of ASCII output, the region name is specified on the "solid" line of the STL file\&. In the case of binary output, all the regions are output as a single STL part\&.
+Write output as a binary POV file\&. The default is ASCII\&. In the case of ASCII output, the region name is specified on the "solid" line of the POV file\&. In the case of binary output, all the regions are output as a single POV part\&.
 .RE
 .PP
 \fB\-P#\fR
@@ -133,13 +133,18 @@ Specify light source location\&.
 .RS 4
 Specify colour of light source\&.
 .RE
+.PP
+\fB\-D\fR
+.RS 4
+Default View\&.
+.RE
 .SH "EXAMPLE"
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ \fIg\-pov \-o sample\&.pov \-C 10 0 0\ \-V 0 0 0\ \-L 0 10 0\ \-l white\ sample\&.g sample_object\fR
+$ \fIg\-pov \-o sample\&.pov \-D \ sample\&.g sample_object\fR > sample\&.pov
 .fi
 .if n \{\
 .RE
