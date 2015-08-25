@@ -19,8 +19,9 @@
  *
  */
 /** @file conv/g-xxx.c
+ * @brief File converts BRL-CAD geometry into POV-Ray.
  *
- * Sample code for converting BRL-CAD models to some other format.
+ * Sample code for converting BRL-CAD models to POV-Ray format.
  * This code assumes that your receiving format can handle CSG
  * primitives and Boolean trees with transformation matrices
  *
@@ -48,7 +49,11 @@ struct user_data {
     struct bn_tol tol;
 };
 
-/* This routine just produces an ascii description of the Boolean tree.
+/**
+ * @brief describe_tree
+ *
+ * 
+ * This routine just produces an ascii description of the Boolean tree.
  * In a real converter, this would output the tree in the desired format.
  */
 void
@@ -69,14 +74,21 @@ describe_tree(union tree *tree,
     }
 
     RT_CK_TREE(tree);
-
-    /* Handle all the possible node types.
+    /**
+     *@brief Different node handler.
+     *
+     * 
+     * Handle all the possible node types.
      * the first four are the most common types, and are typically
      * the only ones found in a BRL-CAD database.
      */
     switch (tree->tr_op) {
-	case OP_DB_LEAF:	/* leaf node, this is a member */
-	    /* Note: tree->tr_l.tl_mat is a pointer to a
+	case OP_DB_LEAF:	
+		/**
+		 *@brief leaf node, this is a member 
+		 *
+		 *
+	     * Note: tree->tr_l.tl_mat is a pointer to a
 	     * transformation matrix to apply to this member
 	     */
 	    bu_vls_strcat(str,  tree->tr_l.tl_name);
@@ -129,6 +141,7 @@ describe_tree(union tree *tree,
 /**
  * @brief This routine is called when a region is first encountered in the
  * hierarchy when processing a tree
+ *
  *
  *      @param tsp tree state (for parsing the tree)
  *      @param pathp A listing of all the nodes traversed to get to this node in the database
@@ -237,7 +250,7 @@ primitive_func(struct db_tree_state *tsp,
 	switch (ip->idb_type) {
 	    /* most commonly used primitives */
 	  
-	    case ID_TOR:	/* torus */
+	    case ID_TOR:	//!< Brief torus */
 		{ 
 		    struct rt_tor_internal *tor = (struct rt_tor_internal *)ip->idb_ptr;
 		    if ( flag == 0 )
@@ -334,6 +347,12 @@ primitive_func(struct db_tree_state *tsp,
 		    printf(" pigment{ LightBlue}\n\t}\n");
 		    break;
 		}
+		case ID_HRT:
+		{
+			struct rt_hrt_internal *hip = (struct rt_hrt_internal *)ip->idb_ptr;
+			
+		    break;
+		}
         case ID_ARB8:       /* convex primitive with from four to six faces */
 		{
 		    /* this primitive may have degenerate faces
@@ -357,7 +376,6 @@ primitive_func(struct db_tree_state *tsp,
 			break;
 		}
 
-		/* other primitives, left as an exercise to the reader */
 		case ID_BOT:        /* Bag O' Triangles */
 		{
 			struct rt_bot_internal *bot = (struct rt_bot_internal *)ip->idb_ptr;
@@ -505,12 +523,6 @@ primitive_func(struct db_tree_state *tsp,
 		    printf("%g, %g, %g", V3ARGS(extr->v_vec));
 		    break;
 		}
-		    /* note that an extrusion references a sketch, make sure you convert
-		    * the sketch also
-		    */
-	    
-
-		/* other primitives, left as an exercise to the reader */
 
 	    
 	    default:
