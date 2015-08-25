@@ -349,12 +349,19 @@ primitive_func(struct db_tree_state *tsp,
 		}
 		case ID_HRT:
 		{
-			struct rt_hrt_internal *hip = (struct rt_hrt_internal *)ip->idb_ptr;
-			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->v));
-			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->xdir));
-			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->ydir));
-			printf("\t<%g, %g, %g>,\n", V3ARGS(hip->zdir));
-			printf("%g\n", hip->d);
+		    struct rt_hrt_internal *hrt = (struct rt_ell_internal *)ip->idb_ptr;
+            Xdir = MAGNITUDE(hrt->xdir);
+            Ydir = MAGNITUDE(hrt->ydir);
+            Zdir = MAGNITUDE(hrt->zdir);
+		    printf("#include \"shapes.inc\"\nobject{\n\t\tHeart-shape(\n");
+		    printf("\t<%g, %g, %g>,\n", V3ARGS(hrt->v));
+		    printf("< %g ,", Xdir);
+		    printf(" %g ,", Ydir);
+		    printf(" %g > )", Zdir);
+		    printf(" %g , ", d);
+		    printf(" pigment{ LightBlue}\n\t}\n");
+
+
 		    break;
 		}
         case ID_ARB8:       /* convex primitive with from four to six faces */
