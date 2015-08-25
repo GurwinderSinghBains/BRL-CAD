@@ -1,4 +1,4 @@
-/*                         G - X X X . C
+/*                         G - P O V . C
  * BRL-CAD
  *
  * Copyright (c) 1993-2014 United States Government as represented by
@@ -18,7 +18,7 @@
  * information.
  *
  */
-/** @file conv/g-xxx.c
+/** @file conv/g-pov.c
  *
  * Sample code for converting BRL-CAD models to some other format.
  * This code assumes that your receiving format can handle CSG
