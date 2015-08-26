@@ -648,7 +648,6 @@ main(int argc, char *argv[])
 		break;
 	}
     }
-
     if (bu_optind+1 >= argc) {
 	bu_exit(1, usage, argv[0]);
     }
@@ -676,7 +675,6 @@ main(int argc, char *argv[])
 
     return 0;
 }
-
 /*
  * Local Variables:
  * mode: C
