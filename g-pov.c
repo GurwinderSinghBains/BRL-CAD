@@ -354,12 +354,11 @@ primitive_func(struct db_tree_state *tsp,
             Xdir = MAGNITUDE(hrt->xdir);
             Ydir = MAGNITUDE(hrt->ydir);
             Zdir = MAGNITUDE(hrt->zdir);
-		    printf("#include \"shapes.inc\"\nobject{\n\t\tHeart-shape(\n");
+		    printf("#include \"shapes.inc\"\nobject{\n\t\tSpheroid(\n");
 		    printf("\t<%g, %g, %g>,\n", V3ARGS(hrt->v));
 		    printf("< %g ,", Xdir);
 		    printf(" %g ,", Ydir);
 		    printf(" %g > )", Zdir);
-		    printf(" %g , ", hrt->d);
 		    printf(" pigment{ LightBlue}\n\t}\n");
 
 
